@@ -404,18 +404,21 @@
     .dvb-item:first-child { border-top: none; }
     .dvb-item:last-child { border-bottom: 1px solid var(--border); margin-bottom: 80px; }
     .dvb-row {
-      display: grid; grid-template-columns: 1fr 1fr auto;
+      display: grid; grid-template-columns: 1fr auto;
       gap: 40px; align-items: start; padding: 28px 0;
       cursor: pointer; user-select: none;
     }
+    .dvb-item.open .dvb-row { grid-template-columns: 1fr 1fr auto; }
     .dvb-title { font-size: 32px; font-weight: 700; color: var(--text-head); line-height: 1.2; }
     .device-mobile .dvb-title { font-size: 22px; }
     .dvb-body { display: none; padding-bottom: 48px; }
     .dvb-item.open .dvb-body { display: block; }
-    .dvb-desc { font-size: 14px; line-height: 1.72; color: var(--text-body); padding-top: 6px; }
+    .dvb-desc { display: none; font-size: 14px; line-height: 1.72; color: var(--text-body); padding-top: 6px; }
+    .dvb-item.open .dvb-desc { display: block; }
     .dvb-toggle { font-size: 24px; font-weight: 300; color: var(--text-muted); line-height: 1; }
     .device-mobile .dvb-row { grid-template-columns: 1fr auto; gap: 16px; padding: 20px 0; }
-    .device-mobile .dvb-desc { grid-column: 1 / -1; padding-top: 0; margin-top: -8px; }
+    .device-mobile .dvb-item.open .dvb-row { grid-template-columns: 1fr auto; }
+    .device-mobile .dvb-desc { grid-column: 1 / -1; padding-top: 8px; }
     .dvb-img-block {
       background: var(--img); width: 100%; height: 360px;
       display: flex; align-items: center; justify-content: center;
