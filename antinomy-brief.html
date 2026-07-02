@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vast 2026 — Antinomy Design Brief</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      max-width: 960px;
+      margin: 60px auto;
+      padding: 0 40px;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    h1 { font-size: 28px; margin-bottom: 4px; }
+    h2 { font-size: 18px; margin-top: 48px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+    ol, ul { padding-left: 24px; }
+    li { margin-bottom: 6px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-family: Arial, sans-serif;
+      font-size: 13px;
+    }
+    th {
+      background-color: #f4f4f4;
+      text-align: left;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      font-weight: bold;
+    }
+    td {
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background-color: #fafafa; }
+    .variant { margin-bottom: 6px; }
+    .variant-name { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Vast 2026 — Antinomy Design Brief</h1>
+
+  <h2>What we're building</h2>
+  <p>A design system made of reusable building blocks. Every component you create should be able to live in multiple contexts across the site.</p>
+  <p>Think Apple Design System, not custom illustrations.<br>
+  Think Stripe component library, not landing pages.</p>
+
+  <h2>The three pillars</h2>
+  <ol>
+    <li><strong>Restraint</strong> — Less is more. Strong typography does the work. When in doubt, remove.</li>
+    <li><strong>Flexibility</strong> — Every component must be reusable across at least 3 different page contexts.</li>
+    <li><strong>Clarity</strong> — A visitor should immediately understand what they're looking at. We want to create consistency where we can and let them dig deeper if we allow them to.</li>
+  </ol>
+
+  <h2>Rules that apply to every component</h2>
+  <ul>
+    <li>No text placed over static images</li>
+    <li>Sharp corners: 0px radius on images</li>
+    <li>Glass/blur effects only over video — never over static images</li>
+    <li>Default alignment is left — center only for XL type moments</li>
+    <li>Limit the type ramp wherever possible</li>
+    <li>+ crosshairs as framing devices — intentional, not decorative</li>
+  </ul>
+
+  <h2>Questions to ask for every component you design</h2>
+  <ul>
+    <li>Can this be built from smaller atoms and molecules we already have?</li>
+    <li>Can this be reused elsewhere?</li>
+    <li>Is this a one-off? If it is, why — and is there a simpler version available?</li>
+    <li>Does this work in both a light and dark context?</li>
+    <li>What's the simplest version of this?</li>
+    <li>How does this behave on mobile?</li>
+    <li>Could this serve 3 or more different page types?</li>
+    <li>If we removed half the content, would it still work?</li>
+    <li>If a user wants to find out more, how can they do that?</li>
+  </ul>
+
+  <h2>What not to focus on</h2>
+  <ul>
+    <li>Designing full pages — components only</li>
+    <li>If a component is a one-off, be intentional about why and when it would be used</li>
+  </ul>
+
+  <h2>Where to start</h2>
+  <p>Work through components in this order:</p>
+  <ol>
+    <li>Navigation</li>
+    <li>Footer</li>
+    <li>Hero</li>
+    <li>Content sections</li>
+  </ol>
+  <p>Max 2 design rounds per component — then we decide or cut.</p>
+
+  <h2>Component List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th width="18%">Component</th>
+        <th width="37%">Variants</th>
+        <th width="45%">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Navigation Bar</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Primary</span> — Updated version of what we have now</div>
+          <div class="variant"><span class="variant-name">2. Secondary</span> — Include a subhead and maybe an image; try to keep it half page</div>
+          <div class="variant"><span class="variant-name">3. Shop</span> — Consider how we'd approach shop nav in this new style</div>
+        </td>
+        <td>3 products at the top level of navigation. About Us and secondary pages like Customers can go in a dropdown — not at the highest level. Don't alter the navigation structure.</td>
+      </tr>
+      <tr>
+        <td>Cookie Banner</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Use existing content</span> — We'll likely keep integrating with CookiesYes</div>
+        </td>
+        <td>Apply new design system.</td>
+      </tr>
+      <tr>
+        <td>Footer</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Simple Footer</span> — Similar to what we have now; newsletter signup combined inside the main footer body</div>
+        </td>
+        <td>May 27 version is the strongest. Functional, organized, room for growth. Make it high fidelity.</td>
+      </tr>
+      <tr>
+        <td>Hero Section</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Full bleed video</span> — Option for CTA button and accessibility controls</div>
+          <div class="variant"><span class="variant-name">2. Secondary version</span> — Option for CTA button and accessibility controls</div>
+          <div class="variant"><span class="variant-name">3. Updates Page</span> — Informed by main hero patterns but uses CMS data for blog posts</div>
+        </td>
+        <td>Each variant should have a fallback image option if video doesn't work.</td>
+      </tr>
+      <tr>
+        <td>Feature — Highlight</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Immersive full bleed</span> — Like the Haven-1 lab content</div>
+          <div class="variant"><span class="variant-name">2. Contained in a frame</span> — Like Apple product sections</div>
+        </td>
+        <td>Deep dives: Haven-1 lab, payload wall, exploded views, product details. Each variant should support simple images or deeper interactions like WebGL.</td>
+      </tr>
+      <tr>
+        <td>Feature Grid</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. 2-up</span></div>
+          <div class="variant"><span class="variant-name">2. 3-up</span></div>
+          <div class="variant"><span class="variant-name">3. 4-up</span></div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Feature — Numbers</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Hero Numbers</span> — Like how we have them on the team page</div>
+          <div class="variant"><span class="variant-name">2. Stats + Image</span> — Like our brochures: PNG image of Haven on the left, stats in a column on the right</div>
+          <div class="variant"><span class="variant-name">3. Diagram + Annotated Figure</span> — Like Haven Demo and LDA callouts, but inspired more by the Apple reference</div>
+        </td>
+        <td>Key stats and figures. Currently used on the team page; too small everywhere else in product features.</td>
+      </tr>
+      <tr>
+        <td>Card Grid</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. 2 column</span></div>
+          <div class="variant"><span class="variant-name">2. 3 column</span></div>
+          <div class="variant"><span class="variant-name">3. 4 column</span></div>
+          <div class="variant"><span class="variant-name">4. 5 column</span></div>
+          <div class="variant"><span class="variant-name">5. 6 column</span></div>
+        </td>
+        <td>2–6 cards, not sliders. Card types can vary from simple photo+text to buttons and CTAs.</td>
+      </tr>
+      <tr>
+        <td>Editorial Block</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Rich text field</span> — For longer form content</div>
+        </td>
+        <td>Could live inside a modal or dropdown section.</td>
+      </tr>
+      <tr>
+        <td>Quote / Testimonial</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Text</span></div>
+          <div class="variant"><span class="variant-name">2. Image</span></div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Timeline / Milestone List</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Simple</span></div>
+          <div class="variant"><span class="variant-name">2. Interactive</span></div>
+        </td>
+        <td>Represents progression in time. Buildable and easy to add to. Should allow us to create entries on the fly.</td>
+      </tr>
+      <tr>
+        <td>Gallery</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Bento (4–6 images)</span> — Branded layout; cards with full images, stats, PNGs, or icons; flexible top or bottom positioning</div>
+          <div class="variant"><span class="variant-name">2. Center aligned</span> — Used for emphasis; fewer focus areas</div>
+          <div class="variant"><span class="variant-name">3. Left aligned</span> — Used for utility; sections with a large volume of images</div>
+        </td>
+        <td>Flexible cards and buttons (can add years, data, or types). Selecting an image should open a full bleed view with more data on that item.</td>
+      </tr>
+      <tr>
+        <td>Carousel</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Images only</span> — No card overlays</div>
+          <div class="variant"><span class="variant-name">2. Logos only</span></div>
+          <div class="variant"><span class="variant-name">3. Quotes</span></div>
+        </td>
+        <td>Continue from what we have.</td>
+      </tr>
+      <tr>
+        <td>Full Bleed Media Block</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Image only</span></div>
+          <div class="variant"><span class="variant-name">2. Video only</span></div>
+        </td>
+        <td>A single image or background video used to break up a page.</td>
+      </tr>
+      <tr>
+        <td>Framed Media Block</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Title + Description + CTA + Media</span></div>
+          <div class="variant"><span class="variant-name">2. Title + CTA + Media</span></div>
+          <div class="variant"><span class="variant-name">3. Title + Description + Media</span></div>
+          <div class="variant"><span class="variant-name">4. Title + Media</span></div>
+        </td>
+        <td>Great utility section. Similar to how we currently use the Haven Demo section on the homepage.</td>
+      </tr>
+      <tr>
+        <td>Scrollytelling Section</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Continuous Crew</span></div>
+          <div class="variant"><span class="variant-name">2. Haven-2 Timeline</span></div>
+        </td>
+        <td>Deep interactive sections that tell a story on scroll. Justifies complex interactions for things like Continuous Crew and Haven-2.</td>
+      </tr>
+      <tr>
+        <td>Dropdown</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Simple — Text only</span> — Title + description content</div>
+          <div class="variant"><span class="variant-name">2. Medium — Text + half-width image</span></div>
+          <div class="variant"><span class="variant-name">3. Title + full bleed image</span></div>
+          <div class="variant"><span class="variant-name">4. Big text + heavy content</span> — Large feature text with descriptions for content-heavy use cases</div>
+        </td>
+        <td>Flexible, dynamic, on a spectrum.</td>
+      </tr>
+      <tr>
+        <td>Tab Panel</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Legal page</span></div>
+          <div class="variant"><span class="variant-name">2. Updates page</span></div>
+          <div class="variant"><span class="variant-name">3. Features on Updates page</span></div>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Spec / Data Table</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. 2 column comparison</span></div>
+          <div class="variant"><span class="variant-name">2. Single column data table</span></div>
+          <div class="variant"><span class="variant-name">3. 3+ columns</span> — Buildable with tabs or expandable columns</div>
+        </td>
+        <td>Buildable comparison section. Used now on the Haven-2 page.</td>
+      </tr>
+      <tr>
+        <td>Diagram / Annotated Figure</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Default</span></div>
+        </td>
+        <td>Specs and feature callouts.</td>
+      </tr>
+      <tr>
+        <td>CTA Section</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Default</span></div>
+        </td>
+        <td>Is this a standalone section or just a button within other sections? Define the pattern.</td>
+      </tr>
+      <tr>
+        <td>Contact / Inquiry Form</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Basic contact form</span> — Name + email + message + consent checkbox + submit; can live in a popup, section, or dropdown</div>
+          <div class="variant"><span class="variant-name">2. Email signup</span> — Email field + submit button</div>
+          <div class="variant"><span class="variant-name">3. Immersive multi-step form</span> — Name + email + phone (optional) + topic dropdown + message + consent + submit</div>
+        </td>
+        <td>Design all input building blocks: text field, textarea, select, radio group, checkbox, button group, step indicator, progress bar, and form success state.</td>
+      </tr>
+      <tr>
+        <td>Modal / Dialog</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Simple popup</span></div>
+          <div class="variant"><span class="variant-name">2. Full screen / customizable</span></div>
+          <div class="variant"><span class="variant-name">3. Video overlay</span></div>
+        </td>
+        <td>Define when, why, and how to use modals. What are the building blocks of each type? What patterns need to be established?</td>
+      </tr>
+      <tr>
+        <td>Drawer / Side Panel</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Default</span></div>
+        </td>
+        <td>Consider for menus, callouts, or deep dives.</td>
+      </tr>
+      <tr>
+        <td>Overview Section</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Text only</span></div>
+          <div class="variant"><span class="variant-name">2. Text + CTA button</span></div>
+          <div class="variant"><span class="variant-name">3. Text + Button + Image</span></div>
+        </td>
+        <td>Explains what someone is looking at — product, station, mission, or capability. Option for a deeper dive via modal or on scroll.</td>
+      </tr>
+      <tr>
+        <td>Product Detail Page</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Current content</span> — Keep the same content layers; ensure type hierarchy and interactions fit the new system</div>
+        </td>
+        <td>PDPs are already doing more than the main site (dropdowns, half-page images, etc.). Bring them into the system without losing that.</td>
+      </tr>
+      <tr>
+        <td>Cart</td>
+        <td>
+          <div class="variant"><span class="variant-name">1. Current content</span> — Identify which components can be reused across the main site</div>
+        </td>
+        <td>Consider whether the cart is a one-off or if it contains reusable components that connect back to the main site system.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
