@@ -59,6 +59,20 @@
       letter-spacing: 0.07em;
     }
 
+    .bar-sep { color: #333; font-size: 12px; margin: 0 2px; }
+
+    .page-select {
+      padding: 4px 8px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: #2a2a2a;
+      color: #999;
+      border: 1px solid #444;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
     /* Stage */
     .stage {
       padding: 72px 0 60px;
@@ -100,13 +114,13 @@
 
     /* Desktop */
     .device-desktop { width: 1200px; box-shadow: 0 24px 80px rgba(0,0,0,.5); }
-    .device-desktop .page-scroll { height: 800px; overflow-y: auto; overflow-x: hidden; background: #efeeec; }
+    .device-desktop .page-scroll { overflow-x: hidden; background: #efeeec; }
 
     /* Mobile */
     .device-mobile { width: 390px; box-shadow: 0 24px 80px rgba(0,0,0,.5); }
     .device-mobile .browser-chrome { background: #d0d0d0; padding: 8px 10px 0; }
     .device-mobile .browser-url { height: 18px; }
-    .device-mobile .page-scroll { height: 800px; overflow-y: auto; overflow-x: hidden; background: #efeeec; }
+    .device-mobile .page-scroll { overflow-x: hidden; background: #efeeec; }
 
 
     /* ─────────────────────────────────────────────────────────────
@@ -157,6 +171,7 @@
       font-size: 13px; letter-spacing: 0.01em;
       color: var(--text-muted);
       white-space: nowrap;
+      text-decoration: none;
     }
     .nav-cta {
       background: var(--btn-fill); color: var(--btn-text);
@@ -563,7 +578,15 @@
   <span class="bar-label">View:</span>
   <button class="toggle-btn active" onclick="setView('desktop')">Desktop</button>
   <button class="toggle-btn" onclick="setView('mobile')">Mobile</button>
-  <div class="bar-title">Vast — Customers &nbsp;·&nbsp; Wireframe v2 &nbsp;·&nbsp; Jul 2026</div>
+  <span class="bar-sep">|</span>
+  <span class="bar-label">Page:</span>
+  <select class="page-select" onchange="if(this.value) window.location.href=this.value">
+    <optgroup label="Pages">
+      <option value="customers.html" selected>Customers</option>
+      <option value="missions.html">Missions</option>
+    </optgroup>
+  </select>
+  <div class="bar-title" id="bar-title"></div>
 </div>
 
 <div class="stage">
@@ -580,7 +603,7 @@
         <span class="nav-link">Stations</span>
         <span class="nav-link">Satellites</span>
         <span class="nav-link">Lunar</span>
-        <span class="nav-link">Missions</span>
+        <a class="nav-link" href="missions.html">Missions</a>
         <span class="nav-link">Customers</span>
         <span class="nav-link">Company</span>
       </div>
@@ -1115,6 +1138,18 @@
 </div><!-- /stage -->
 
 <script>
+  // ─── Page identity (update PAGE_NAME per file) ───
+  const PAGE_NAME = "Customers";
+
+  // Auto-populate last-edited timestamp from file modification date
+  (function() {
+    const d = new Date(document.lastModified);
+    const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('bar-title').textContent =
+      'Vast — ' + PAGE_NAME + ' · Last edited ' + date + ' ' + time;
+  })();
+
   // Destinations accordion
   document.querySelectorAll('.diagram-tab-header').forEach(function(header) {
     header.addEventListener('click', function() {

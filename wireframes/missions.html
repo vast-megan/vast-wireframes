@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wireframe — Missions</title>
+  <style>
+
+    /* ─────────────────────────────────────────────────────────────
+       RESET
+    ───────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ─────────────────────────────────────────────────────────────
+       OUTER SHELL  (tool chrome — not the wireframe)
+    ───────────────────────────────────────────────────────────── */
+    body {
+      background: #2c2c2c;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+    }
+
+    .tool-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 300;
+      background: #1a1a1a;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+    }
+
+    .tool-bar .bar-label {
+      color: #555;
+      font-size: 10px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .toggle-btn {
+      padding: 5px 15px;
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid #444;
+      background: transparent;
+      color: #777;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+    .toggle-btn.active { background: #fff; color: #111; border-color: #fff; }
+
+    .bar-sep { color: #333; font-size: 12px; margin: 0 2px; }
+
+    .page-select {
+      padding: 4px 8px;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: #2a2a2a;
+      color: #999;
+      border: 1px solid #444;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    .bar-title {
+      margin-left: auto;
+      color: #444;
+      font-size: 10px;
+      letter-spacing: 0.07em;
+    }
+
+    /* Stage */
+    .stage {
+      padding: 72px 0 60px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       DEVICE FRAMES
+    ───────────────────────────────────────────────────────────── */
+    .device { display: none; }
+    .device.active { display: block; }
+
+    .device-desktop { width: 1200px; box-shadow: 0 24px 80px rgba(0,0,0,.5); }
+    .device-desktop .page-scroll { overflow-x: hidden; background: #efeeec; }
+
+    .device-mobile { width: 390px; box-shadow: 0 24px 80px rgba(0,0,0,.5); }
+    .device-mobile .page-scroll { overflow-x: hidden; background: #efeeec; }
+
+
+    /* ─────────────────────────────────────────────────────────────
+       WIREFRAME PAGE — shared tokens
+    ───────────────────────────────────────────────────────────── */
+
+    :root {
+      --bg:         #efeeec;
+      --bg-alt:     #e8e7e4;
+      --img:        #dddcda;
+      --img-dark:   #c8c7c4;
+      --border:     #d8d7d4;
+      --text-head:  #1a1a18;
+      --text-body:  #6a6a67;
+      --text-muted: #a8a7a4;
+      --text-label: #b0afac;
+      --corner:     #c0bfbb;
+      --btn-fill:   #1a1a18;
+      --btn-text:   #efeeec;
+    }
+
+    /* ─── NAV ─── */
+    .wf-nav {
+      background: #efeeec;
+      border-bottom: 1px solid var(--border);
+      height: 58px;
+      display: flex;
+      align-items: center;
+      padding: 0 56px;
+      gap: 28px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .device-mobile .wf-nav { padding: 0 20px; height: 52px; }
+
+    .nav-logo { margin-right: auto; flex-shrink: 0; }
+    .nav-logo img { display: block; height: 16px; width: auto; }
+    .nav-link {
+      font-size: 13px; letter-spacing: 0.01em;
+      color: var(--text-muted);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .nav-link.active { color: var(--text-head); }
+    .nav-burger {
+      width: 22px; height: 14px;
+      display: flex; flex-direction: column;
+      justify-content: space-between; flex-shrink: 0;
+    }
+    .nav-burger span { display: block; height: 1px; background: var(--text-muted); }
+
+    /* ─── SECTION WRAPPER ─── */
+    .wf-sec {
+      position: relative;
+      padding: 72px 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .device-mobile .wf-sec { padding: 48px 20px; }
+
+    /* Corner marks */
+    .sec-corners::before, .sec-corners::after,
+    .sec-corners .corner-b::before, .sec-corners .corner-b::after {
+      content: '+';
+      position: absolute;
+      color: var(--corner);
+      font-size: 13px;
+      line-height: 1;
+    }
+    .sec-corners::before  { top: 10px;    left: 14px;    }
+    .sec-corners::after   { top: 10px;    right: 14px;   }
+    .corner-b { pointer-events: none; }
+    .sec-corners .corner-b::before { bottom: 10px; left: 14px; }
+    .sec-corners .corner-b::after  { bottom: 10px; right: 14px; }
+
+    /* ─── TYPOGRAPHY ─── */
+    .wf-h1 {
+      font-size: 40px; font-weight: 800;
+      line-height: 1.08; color: var(--text-head);
+      letter-spacing: -0.02em;
+      max-width: 680px;
+    }
+    .device-mobile .wf-h1 { font-size: 26px; }
+
+    .wf-body-lg {
+      font-size: 22px; line-height: 1.45;
+      color: var(--text-head); max-width: 800px;
+      font-weight: 400;
+    }
+    .device-mobile .wf-body-lg { font-size: 15px; }
+
+    /* ─── BUTTONS ─── */
+    .wf-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; letter-spacing: 0.01em;
+      padding: 10px 20px;
+      border-radius: 1px; cursor: default; margin-top: 20px;
+    }
+    .wf-btn-fill { background: var(--btn-fill); color: var(--btn-text); }
+
+    /* ─── IMAGE PLACEHOLDER ─── */
+    .wf-img {
+      background: var(--img);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-label);
+      font-size: 9px; letter-spacing: 0.1em;
+      text-transform: uppercase; text-align: center;
+      padding: 6px;
+    }
+
+    /* Overview section */
+    .sec-overview { padding-top: 100px !important; padding-bottom: 100px !important; }
+    .device-mobile .sec-overview { padding-top: 72px !important; padding-bottom: 72px !important; }
+
+    /* ─── FOOTER ─── */
+    .wf-footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 56px 56px 0;
+    }
+    .device-mobile .wf-footer { padding: 40px 20px 0; }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr 1.8fr;
+      gap: 40px;
+      padding-bottom: 48px;
+    }
+    .device-mobile .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+    .footer-col-label {
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-label);
+      margin-bottom: 18px;
+    }
+    .footer-link { font-size: 13px; color: var(--text-body); padding: 5px 0; display: block; }
+    .footer-email { font-size: 20px; color: var(--text-muted); padding: 16px 0 12px; }
+    .footer-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
+    .footer-signup-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
+    .footer-privacy { font-size: 11px; color: var(--text-muted); line-height: 1.55; max-width: 260px; }
+    .footer-signup-btn { font-size: 12px; color: var(--text-body); border: 1px solid var(--border); padding: 8px 18px; white-space: nowrap; flex-shrink: 0; }
+    .footer-bottom { padding: 20px 0; display: flex; align-items: center; gap: 20px; }
+    .footer-copy { font-size: 11px; color: var(--text-muted); }
+    .footer-legal { font-size: 11px; color: var(--text-body); border-bottom: 1px solid var(--border); padding-bottom: 1px; }
+    .footer-socials { margin-left: auto; display: flex; gap: 14px; align-items: center; }
+    .social-icon { width: 16px; height: 16px; background: var(--img-dark); border-radius: 1px; }
+
+    /* ─── UTILITY ─── */
+    .mt8  { margin-top: 8px; }
+    .mt16 { margin-top: 16px; }
+    .mt24 { margin-top: 24px; }
+    .mt32 { margin-top: 32px; }
+    .mt40 { margin-top: 40px; }
+
+
+    /* ─────────────────────────────────────────────────────────────
+       MISSIONS — SECTION HEADERS
+    ───────────────────────────────────────────────────────────── */
+
+    .missions-section {
+      padding-top: 16px;
+    }
+
+    .missions-section-head {
+      padding: 56px 56px 40px;
+    }
+    .device-mobile .missions-section-head { padding: 40px 20px 28px; }
+
+    .missions-section-eyebrow {
+      display: block;
+      font-size: 9px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text-label);
+      margin-bottom: 10px;
+    }
+
+    .missions-section-title {
+      font-size: 44px; font-weight: 800;
+      letter-spacing: -0.025em; color: var(--text-head); line-height: 1.06;
+    }
+    .device-mobile .missions-section-title { font-size: 28px; }
+
+    /* ─────────────────────────────────────────────────────────────
+       MISSIONS — CARD SYSTEM (no borders — background color only)
+    ───────────────────────────────────────────────────────────── */
+
+    /* Card list wrapper — matches hero video width (56px inset each side) */
+    .missions-cards-wrap {
+      padding: 0 56px 80px;
+    }
+    .device-mobile .missions-cards-wrap { padding: 0 20px 56px; }
+
+    /* Individual mission card */
+    .mission-card {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 32px;
+      background: var(--bg-alt);
+    }
+    .mission-card.crew { min-height: 80vh; }
+    .mission-card:last-child { margin-bottom: 0; }
+
+    /* ── Top zone: info left + square image right ── */
+    .mc-top {
+      display: flex;
+      align-items: flex-start;
+      flex: 1;
+      min-height: 0;
+    }
+    .device-mobile .mc-top { flex-direction: column; }
+
+    .mc-info {
+      flex: 1;
+      padding: 52px 48px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .device-mobile .mc-info { padding: 28px 20px 20px; }
+
+    .mc-label {
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-label);
+      margin-bottom: 14px; display: block;
+    }
+
+    .mc-heading {
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--text-head);
+      line-height: 1.15; margin-bottom: 14px;
+    }
+    .device-mobile .mc-heading { font-size: 20px; }
+
+    .mc-desc {
+      font-size: 15px; color: var(--text-body);
+      line-height: 1.65; max-width: 480px;
+    }
+
+    .mc-note {
+      font-size: 10px; color: var(--text-muted);
+      margin-top: 12px; font-style: italic;
+    }
+
+    /* Spec list — rows of label + value, no borders */
+    .mc-specs {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .mc-spec-row {
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+    }
+
+    .mc-spec-label {
+      font-size: 9px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-label);
+      width: 90px; flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .mc-spec-val {
+      font-size: 13px; color: var(--text-body); line-height: 1.4;
+    }
+
+    /* Square image panel */
+    .mc-img-panel {
+      width: 400px;
+      height: 400px;
+      flex-shrink: 0;
+      background: var(--img-dark);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-label); font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center; padding: 8px;
+    }
+    .device-mobile .mc-img-panel {
+      width: 100%;
+      height: 240px;
+      order: -1;
+    }
+
+    /* ── Crew zone — no borders, just spacing ── */
+    .mc-crew-zone {
+      padding: 0 48px 16px;
+    }
+    .device-mobile .mc-crew-zone { padding: 0 20px 12px; }
+
+    .mc-crew-label {
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-label);
+      display: block; margin-bottom: 16px;
+    }
+
+    .mc-crew-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .device-mobile .mc-crew-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .mc-portrait {
+      width: 100%; aspect-ratio: 1 / 1;
+      background: var(--img-dark);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-label); font-size: 9px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      text-align: center; margin-bottom: 10px;
+    }
+
+    .mc-crew-role {
+      font-size: 9px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-label);
+      margin-bottom: 3px; display: block;
+    }
+
+    .mc-crew-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text-head); line-height: 1.2;
+      display: block; margin-bottom: 5px;
+    }
+    .mc-crew-name.muted {
+      color: var(--text-muted); font-weight: 400; font-style: italic;
+    }
+
+    .mc-crew-country {
+      font-size: 11px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 5px;
+      margin-bottom: 5px;
+    }
+
+    .mc-flag {
+      display: inline-block;
+      width: 18px; height: 12px;
+      background: var(--img-dark);
+      flex-shrink: 0;
+    }
+
+    .mc-crew-announce {
+      font-size: 10px; color: var(--text-body);
+      display: block;
+      border-bottom: 1px solid var(--text-body);
+      display: inline-block;
+      cursor: default;
+    }
+    .mc-crew-announce.muted {
+      color: var(--text-muted); border-bottom: none; font-style: italic;
+    }
+
+    /* ── Stats row (completed missions) ── */
+    .mc-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      padding: 8px 48px 36px;
+    }
+    .device-mobile .mc-stats { grid-template-columns: 1fr 1fr; padding: 8px 20px 28px; }
+
+    .mc-stat-val {
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--text-head);
+      line-height: 1; margin-bottom: 5px;
+    }
+    .device-mobile .mc-stat-val { font-size: 18px; }
+
+    .mc-stat-label {
+      font-size: 9px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-label);
+    }
+
+    /* ── CTA strip ── */
+    .mc-cta {
+      padding: 0 48px 40px;
+      display: flex; align-items: center; gap: 16px;
+      margin-top: auto;
+    }
+    .device-mobile .mc-cta { padding: 0 20px 32px; flex-wrap: wrap; }
+
+    .mc-patch-zone {
+      padding: 20px 48px 36px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .device-mobile .mc-patch-zone { padding: 16px 20px 28px; gap: 20px; }
+
+    .mc-patch-circle {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: var(--img-dark);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-label); font-size: 8px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      text-align: center; line-height: 1.4;
+      flex-shrink: 0;
+    }
+    .device-mobile .mc-patch-circle { width: 64px; height: 64px; font-size: 7px; }
+
+    .mc-patch-text { flex: 1; }
+    .mc-patch-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--text-head); display: block; margin-bottom: 5px;
+    }
+    .mc-patch-desc {
+      font-size: 13px; color: var(--text-body); line-height: 1.55;
+    }
+
+    .mc-btn {
+      display: inline-block;
+      background: var(--btn-fill); color: var(--btn-text);
+      font-size: 12px; letter-spacing: 0.02em;
+      padding: 10px 20px; cursor: default;
+    }
+    .mc-btn-outline {
+      display: inline-block;
+      background: transparent; color: var(--text-body);
+      border: 1px solid var(--border);
+      font-size: 12px; letter-spacing: 0.02em;
+      padding: 10px 20px; cursor: default;
+    }
+
+    .mc-badge {
+      display: inline-block;
+      background: var(--text-head); color: var(--btn-text);
+      font-size: 9px; letter-spacing: 0.15em;
+      text-transform: uppercase; padding: 5px 12px;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ─── TOOL BAR ─── -->
+<div class="tool-bar">
+  <span class="bar-label">View:</span>
+  <button class="toggle-btn active" onclick="setView('desktop')">Desktop</button>
+  <button class="toggle-btn" onclick="setView('mobile')">Mobile</button>
+  <span class="bar-sep">|</span>
+  <span class="bar-label">Page:</span>
+  <select class="page-select" onchange="if(this.value) window.location.href=this.value">
+    <optgroup label="Pages">
+      <option value="customers.html">Customers</option>
+      <option value="missions.html" selected>Missions</option>
+    </optgroup>
+  </select>
+  <div class="bar-title" id="bar-title"></div>
+</div>
+
+<div class="stage">
+
+  <!-- ════════════════════════════════════════════
+       DESKTOP
+  ════════════════════════════════════════════ -->
+  <div class="device device-desktop active" id="device-desktop">
+    <div class="page-scroll" id="scroll-desktop">
+
+      <!-- NAV -->
+      <div class="wf-nav">
+        <div class="nav-logo"><img src="Logos/Vast_Wordmark_Meteorite_Black_RGB.png" alt="Vast"></div>
+        <span class="nav-link">Stations</span>
+        <span class="nav-link">Satellites</span>
+        <span class="nav-link">Lunar</span>
+        <span class="nav-link active">Missions</span>
+        <a class="nav-link" href="customers.html">Customers</a>
+        <span class="nav-link">Company</span>
+      </div>
+
+      <!-- ── HERO ── -->
+      <div style="padding: 80px 56px 0;">
+        <div class="wf-h1" style="font-size: 72px; letter-spacing: -0.03em; max-width: none;">Missions</div>
+      </div>
+      <div style="padding: 40px 56px 56px;">
+        <div class="wf-img" style="height: 520px;">[ Compilation — Haven-1 and Haven Demo footage ]</div>
+      </div>
+
+      <!-- ── OVERVIEW ── -->
+      <div class="wf-sec sec-overview sec-corners" style="border-bottom: 1px solid var(--border);">
+        <div class="corner-b"></div>
+        <div class="wf-body-lg">Vast offers both human spaceflight and satellite missions in low-Earth orbit, enabling opportunities for research, technology, manufacturing, and satellite operations.</div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           UPCOMING CREWED
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Upcoming crewed missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: VAST-ISS-1 -->
+          <div class="mission-card crew">
+            <div class="mc-top">
+              <div class="mc-info">
+<h2 class="mc-heading">The sixth private astronaut mission to the International Space Station</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">International Space Station</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">Low-Earth Orbit · 500 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">Summer 2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Kennedy Space Center LC-39A, Cape Canaveral, FL</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Partners</span><span class="mc-spec-val">CNES · ESA · NASA · SpaceX</span></div>
+                </div>
+              </div>
+              <div class="mc-img-panel">[ ISS ]</div>
+            </div>
+
+            <div class="mc-crew-zone">
+              <span class="mc-crew-label">Crew</span>
+              <div class="mc-crew-grid">
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Commander</span>
+                  <span class="mc-crew-name">Thomas Pesquet</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>France</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Pilot</span>
+                  <span class="mc-crew-name">Aleš Svoboda</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>Czech Republic</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 1</span>
+                  <span class="mc-crew-name muted">Unannounced</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 2</span>
+                  <span class="mc-crew-name muted">Unannounced</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-patch-zone">
+              <div class="mc-patch-circle">Mission<br>Patch</div>
+              <div class="mc-patch-text">
+                <span class="mc-patch-title">VAST-ISS-1</span>
+                <p class="mc-patch-desc">Mission patch to be revealed closer to launch.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Haven-1 Mission 1 (crewed) -->
+          <div class="mission-card crew">
+            <div class="mc-top">
+              <div class="mc-info">
+<h2 class="mc-heading">The world's first commercial space station</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven-1</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">Low-Earth Orbit · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Kennedy Space Center LC-39A, Cape Canaveral, FL</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Partner</span><span class="mc-spec-val">SpaceX</span></div>
+                </div>
+              </div>
+              <div class="mc-img-panel">[ Haven-1 ]</div>
+            </div>
+
+            <div class="mc-crew-zone">
+              <span class="mc-crew-label">Crew</span>
+              <div class="mc-crew-grid">
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Commander</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Pilot</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 1</span>
+                  <span class="mc-crew-name">Arnaurd Prost</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>France</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 2</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-patch-zone">
+              <div class="mc-patch-circle">Mission<br>Patch</div>
+              <div class="mc-patch-text">
+                <span class="mc-patch-title">Haven-1 Mission 1</span>
+                <p class="mc-patch-desc">Mission patch to be revealed closer to launch.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Haven Station Missions 2, 3 & 4 -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-info">
+<h2 class="mc-heading">Future Haven Station missions</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven Station</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">Low-Earth Orbit · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2028, 2029</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Kennedy Space Center LC-39A, Cape Canaveral, FL</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                </div>
+                <p class="mc-desc" style="margin-top: 24px;">Inquire about joining Missions 2, 3, and 4 at <span style="text-decoration: underline;">fly@vastspace.com</span></p>
+              </div>
+              <div class="mc-img-panel">[ Haven Station render ]</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           UPCOMING UNCREWED
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Upcoming uncrewed missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: Haven Module 1 -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-info">
+<h2 class="mc-heading">Haven Module 1</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven-1</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">Low-Earth Orbit · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Kennedy Space Center LC-39A, Cape Canaveral, FL</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                </div>
+              </div>
+              <div class="mc-img-panel">[ Haven-1 module render — web-gl? ]</div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+          <!-- Card: Vast Satellites -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-info">
+<h2 class="mc-heading">Vast Satellites</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Bus Dry Mass</span><span class="mc-spec-val">700 kg</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Dimensions</span><span class="mc-spec-val">2.2 × 3.6 m</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Wingspan</span><span class="mc-spec-val">33 m</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Payload Cap.</span><span class="mc-spec-val">350+ kg</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Solar Power</span><span class="mc-spec-val">15 kW</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Total ΔV</span><span class="mc-spec-val">≥500 m/s</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Peak Payload</span><span class="mc-spec-val">20 kW+ (time dependent)</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">LEO Altitude</span><span class="mc-spec-val">350 – 1,200 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Design Life</span><span class="mc-spec-val">5 years</span></div>
+                </div>
+              </div>
+              <div class="mc-img-panel">[ Satellite render ]</div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           PAST MISSIONS
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Past missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: Haven Demo -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-info">
+                <span class="mc-label">Mission complete</span>
+                <h2 class="mc-heading">Haven Demo</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Date</span><span class="mc-spec-val">November 2, 2025</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Deorbit Date</span><span class="mc-spec-val">February 4, 2026</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">45°, 510 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Space Launch Complex 4 (SLC-40) – Cape Canaveral, Florida</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">94 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Outcome</span><span class="mc-spec-val">100% mission success</span></div>
+                </div>
+              </div>
+              <div class="mc-img-panel">[ Haven Demo — on orbit photography ]</div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ── CREATE YOUR MISSION ── -->
+      <div style="background: var(--img-dark); padding: 96px 56px; text-align: center;">
+        <div style="font-size: 36px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-head); margin-bottom: 16px;">Create your mission</div>
+        <div style="font-size: 13px; line-height: 1.68; color: var(--text-body); max-width: 440px; margin: 0 auto 28px;">Email us at <strong>fly@vastspace.com</strong> to inquire about mission availability.</div>
+        <div class="wf-btn wf-btn-fill" style="background: var(--text-head); color: var(--btn-text); margin-top: 0; display: inline-flex;">› Get in touch</div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="wf-footer">
+        <div class="nav-logo" style="margin-bottom: 40px;"><img src="Logos/Vast_Wordmark_Meteorite_Black_RGB.png" alt="Vast"></div>
+        <div class="footer-grid">
+          <div>
+            <div class="footer-col-label">Products</div>
+            <span class="footer-link">Haven Station</span>
+            <span class="footer-link">Satellites</span>
+            <span class="footer-link">Lunar</span>
+            <span class="footer-link">Science Innovations</span>
+            <span class="footer-link">Large Docking Adaptor</span>
+            <span class="footer-link">Haven Demo</span>
+            <span class="footer-link">Haven-1</span>
+          </div>
+          <div>
+            <div class="footer-col-label">About</div>
+            <span class="footer-link">Overview</span>
+            <span class="footer-link">Missions</span>
+            <span class="footer-link">Customers</span>
+            <span class="footer-link">News</span>
+            <span class="footer-link">Careers</span>
+            <span class="footer-link">Shop</span>
+            <span class="footer-link">Media Assets</span>
+          </div>
+          <div>
+            <div class="footer-col-label">Sign up for updates</div>
+            <div class="footer-email">Enter your email</div>
+            <div class="footer-divider"></div>
+            <div class="footer-signup-row">
+              <div class="footer-privacy">By subscribing you agree to our Privacy Policy and provide consent to receive updates from Vast.</div>
+              <div class="footer-signup-btn">› Sign up</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding-bottom: 20px;">
+          <div style="width: 36px; height: 24px; background: var(--img-dark); border-radius: 1px;"></div>
+        </div>
+        <div style="height: 1px; background: var(--border);"></div>
+        <div class="footer-bottom">
+          <span class="footer-copy">© 2026 Vast, Inc. All rights reserved.</span>
+          <span class="footer-legal">Legal</span>
+          <div class="footer-socials">
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-scroll desktop -->
+  </div><!-- /device-desktop -->
+
+
+  <!-- ════════════════════════════════════════════
+       MOBILE
+  ════════════════════════════════════════════ -->
+  <div class="device device-mobile" id="device-mobile">
+    <div class="page-scroll" id="scroll-mobile">
+
+      <!-- NAV -->
+      <div class="wf-nav">
+        <div class="nav-logo"><img src="Logos/Vast_Wordmark_Meteorite_Black_RGB.png" alt="Vast"></div>
+        <div class="nav-burger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- ── HERO ── -->
+      <div style="padding: 52px 20px 0;">
+        <div class="wf-h1">Missions</div>
+      </div>
+      <div style="padding: 32px 20px 40px;">
+        <div class="wf-img" style="height: 280px;">[ Compilation — Haven-1 and Haven Demo footage ]</div>
+      </div>
+
+      <!-- ── OVERVIEW ── -->
+      <div class="wf-sec sec-overview sec-corners" style="border-bottom: 1px solid var(--border);">
+        <div class="corner-b"></div>
+        <div class="wf-body-lg">Vast offers both human spaceflight and satellite missions in low-Earth orbit, enabling opportunities for research, technology, manufacturing, and satellite operations.</div>
+      </div>
+
+      <!-- ═══════════════════════════════════════
+           UPCOMING CREWED
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Upcoming crewed missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: VAST-ISS-1 -->
+          <div class="mission-card crew">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ ISS ]</div>
+              <div class="mc-info">
+<h2 class="mc-heading">The sixth private astronaut mission to the International Space Station</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">International Space Station</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">Low-Earth Orbit · 500 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">Summer 2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">KSC LC-39A, Cape Canaveral</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Partners</span><span class="mc-spec-val">CNES · ESA · NASA · SpaceX</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-crew-zone">
+              <span class="mc-crew-label">Crew</span>
+              <div class="mc-crew-grid">
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Commander</span>
+                  <span class="mc-crew-name">Thomas Pesquet</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>France</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Pilot</span>
+                  <span class="mc-crew-name">Aleš Svoboda</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>Czech Republic</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 1</span>
+                  <span class="mc-crew-name muted">Unannounced</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 2</span>
+                  <span class="mc-crew-name muted">Unannounced</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-patch-zone">
+              <div class="mc-patch-circle">Mission<br>Patch</div>
+              <div class="mc-patch-text">
+                <span class="mc-patch-title">VAST-ISS-1</span>
+                <p class="mc-patch-desc">Mission patch to be revealed closer to launch.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Haven-1 Mission 1 (crewed) -->
+          <div class="mission-card crew">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ Haven-1 ]</div>
+              <div class="mc-info">
+<h2 class="mc-heading">The world's first commercial space station</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven-1</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">LEO · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">KSC LC-39A, Cape Canaveral</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Partner</span><span class="mc-spec-val">SpaceX</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-crew-zone">
+              <span class="mc-crew-label">Crew</span>
+              <div class="mc-crew-grid">
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Commander</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Pilot</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 1</span>
+                  <span class="mc-crew-name">Arnaurd Prost</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>France</span>
+                  <span class="mc-crew-announce">› Announcement</span>
+                </div>
+                <div class="mc-crew-slot">
+                  <div class="mc-portrait">[ Photo ]</div>
+                  <span class="mc-crew-role">Mission Specialist 2</span>
+                  <span class="mc-crew-name muted">TBD</span>
+                  <span class="mc-crew-country"><span class="mc-flag"></span>—</span>
+                  <span class="mc-crew-announce muted">Unannounced</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-patch-zone">
+              <div class="mc-patch-circle">Mission<br>Patch</div>
+              <div class="mc-patch-text">
+                <span class="mc-patch-title">Haven-1 Mission 1</span>
+                <p class="mc-patch-desc">Mission patch to be revealed closer to launch.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card: Haven Station Missions 2, 3 & 4 -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ Haven Station render ]</div>
+              <div class="mc-info">
+<h2 class="mc-heading">Future Haven Station missions</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven Station</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">LEO · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2028, 2029</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">KSC LC-39A, Cape Canaveral</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                </div>
+                <p class="mc-note" style="margin-top: 24px;">Inquire about joining Missions 2, 3, and 4 at fly@vastspace.com.</p>
+              </div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Inquire — fly@vastspace.com</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           UPCOMING UNCREWED
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Upcoming uncrewed missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: Haven Module 1 -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ Haven-1 module render ]</div>
+              <div class="mc-info">
+<h2 class="mc-heading">Haven Module 1</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Destination</span><span class="mc-spec-val">Haven-1</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">LEO · 51.6° · 425 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">NET Launch</span><span class="mc-spec-val">2027</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">KSC LC-39A</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">14 days</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+          <!-- Card: Vast Satellites -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ Satellite render ]</div>
+              <div class="mc-info">
+<h2 class="mc-heading">Vast Satellites</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Bus Dry Mass</span><span class="mc-spec-val">700 kg</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Dimensions</span><span class="mc-spec-val">2.2 × 3.6 m</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Wingspan</span><span class="mc-spec-val">33 m</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Payload Cap.</span><span class="mc-spec-val">350+ kg</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Solar Power</span><span class="mc-spec-val">15 kW</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Total ΔV</span><span class="mc-spec-val">≥500 m/s</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Peak Payload</span><span class="mc-spec-val">20 kW+ (time dependent)</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">LEO Altitude</span><span class="mc-spec-val">350 – 1,200 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Design Life</span><span class="mc-spec-val">5 years</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ═══════════════════════════════════════
+           PAST MISSIONS
+      ═══════════════════════════════════════ -->
+      <div class="missions-section">
+        <div class="missions-section-head">
+<div class="missions-section-title">Past missions</div>
+        </div>
+
+        <div class="missions-cards-wrap">
+
+          <!-- Card: Haven Demo -->
+          <div class="mission-card">
+            <div class="mc-top">
+              <div class="mc-img-panel">[ Haven Demo — on orbit photography ]</div>
+              <div class="mc-info">
+                <span class="mc-label">Mission complete</span>
+                <h2 class="mc-heading">Haven Demo</h2>
+                <div class="mc-specs">
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Date</span><span class="mc-spec-val">November 2, 2025</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Deorbit Date</span><span class="mc-spec-val">February 4, 2026</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Orbit</span><span class="mc-spec-val">45°, 510 km</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Site</span><span class="mc-spec-val">Space Launch Complex 4 (SLC-40) – Cape Canaveral, Florida</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Launch Vehicle</span><span class="mc-spec-val">SpaceX Falcon 9</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Duration</span><span class="mc-spec-val">94 days</span></div>
+                  <div class="mc-spec-row"><span class="mc-spec-label">Outcome</span><span class="mc-spec-val">100% mission success</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mc-cta">
+              <span class="mc-btn-outline">› Learn more</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- ── CREATE YOUR MISSION ── -->
+      <div style="background: var(--img-dark); padding: 72px 20px; text-align: center;">
+        <div style="font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: var(--text-head); margin-bottom: 14px;">Create your mission</div>
+        <div style="font-size: 13px; line-height: 1.68; color: var(--text-body); max-width: 300px; margin: 0 auto 24px;">Email us at <strong>fly@vastspace.com</strong> to inquire about mission availability.</div>
+        <div class="wf-btn wf-btn-fill" style="background: var(--text-head); color: var(--btn-text); margin-top: 0; display: inline-flex;">› Get in touch</div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="wf-footer">
+        <div class="nav-logo" style="margin-bottom: 40px;"><img src="Logos/Vast_Wordmark_Meteorite_Black_RGB.png" alt="Vast"></div>
+        <div class="footer-grid">
+          <div>
+            <div class="footer-col-label">Products</div>
+            <span class="footer-link">Haven Station</span>
+            <span class="footer-link">Satellites</span>
+            <span class="footer-link">Lunar</span>
+            <span class="footer-link">Haven Demo</span>
+            <span class="footer-link">Haven-1</span>
+          </div>
+          <div>
+            <div class="footer-col-label">About</div>
+            <span class="footer-link">Overview</span>
+            <span class="footer-link">Missions</span>
+            <span class="footer-link">Customers</span>
+            <span class="footer-link">News</span>
+            <span class="footer-link">Careers</span>
+          </div>
+          <div>
+            <div class="footer-col-label">Sign up for updates</div>
+            <div class="footer-email">Enter your email</div>
+            <div class="footer-divider"></div>
+            <div class="footer-signup-row">
+              <div class="footer-privacy">By subscribing you agree to our Privacy Policy and provide consent to receive updates from Vast.</div>
+              <div class="footer-signup-btn">› Sign up</div>
+            </div>
+          </div>
+        </div>
+        <div style="height: 1px; background: var(--border);"></div>
+        <div class="footer-bottom">
+          <span class="footer-copy">© 2026 Vast, Inc. All rights reserved.</span>
+          <span class="footer-legal">Legal</span>
+          <div class="footer-socials">
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+            <div class="social-icon"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-scroll mobile -->
+  </div><!-- /device-mobile -->
+
+</div><!-- /stage -->
+
+<script>
+  const PAGE_NAME = "Missions";
+  (function() {
+    const d = new Date(document.lastModified);
+    const date = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('bar-title').textContent =
+      'Vast — ' + PAGE_NAME + ' · Last edited ' + date + ' ' + time;
+  })();
+  function setView(mode) {
+    document.querySelectorAll('.device').forEach(d => d.classList.remove('active'));
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('device-' + mode).classList.add('active');
+    document.querySelectorAll('.toggle-btn').forEach(b => {
+      if (b.textContent.trim().toLowerCase() === mode) b.classList.add('active');
+    });
+    const s = document.getElementById('scroll-' + mode);
+    if (s) s.scrollTop = 0;
+  }
+</script>
+</body>
+</html>
